@@ -8,8 +8,8 @@ import cv2
 import sys
 sys.path.append(r'gym_pacman/envs/Pacman_Game') 
 sys.path.append(r'gym_pacman/envs') 
-from Pacman_game.run import *
-from Pacman_game.constants import PACMAN
+from run import *
+from constants import PACMAN
 
 
 from mss import mss
