@@ -19,7 +19,7 @@ keyboard_keys = ["up","down","left","right"]
 MAX_REWARD = 100000
 N_DISCRETE_ACTIONS = 4
 
-BOUNDING_BOX = {'top': 170 , 'left': 100, 'width': 448, 'height': 576-16*4}
+BOUNDING_BOX = {'top': 170 , 'left': 100, 'width': 448, 'height': 500}
 NUMBER_OF_CHANNELS = 1
 REWARD_RANGE = (-100,100)
 
@@ -49,6 +49,7 @@ class PacmanEnv(Env):
         view = pygame.surfarray.array3d(self.game.screen)
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
+        view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
         return view[45:545, :]
 
     def _take_action(self, action):
