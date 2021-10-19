@@ -6,8 +6,8 @@ from numpy.core.fromnumeric import shape
 import numpy as np
 import cv2
 import sys
-sys.path.append(r'/home/lpe/Desktop/Project_in_Artificial_Intelligence_PAC-MAN/gym-pacman/gym_pacman_copy/envs/Pacman_Game') 
-sys.path.append(r'/home/lpe/Desktop/Project_in_Artificial_Intelligence_PAC-MAN/gym-pacman/gym_pacman_copy/envs') 
+sys.path.append(r'gym_pacman/envs/Pacman_Game') 
+sys.path.append(r'gym_pacman/envs') 
 from Pacman_game.run import *
 from Pacman_game.constants import PACMAN
 
