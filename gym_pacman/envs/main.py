@@ -25,8 +25,8 @@ if __name__ == "__main__":
         #img = np.array(sct.grab(bounding_box))
         #img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
 
-        myScreenshot = pyautogui.screenshot(region=(TOP,LEFT,WIDTH,HEIGHT))
-        open_cv_image = np.array(myScreenshot) 
+        #myScreenshot = pyautogui.screenshot(region=(TOP,LEFT,WIDTH,HEIGHT))
+        #open_cv_image = np.array(myScreenshot) 
         #myScreenshot.save(r'Path to save screenshot\file name.png')
 
         # cv2.imshow("test",open_cv_image)

@@ -10,9 +10,9 @@ sys.path.append(r'gym_pacman/envs/Pacman_Game')
 sys.path.append(r'gym_pacman/envs') 
 from run import *
 from constants import PACMAN
+import pygame
 
-
-from mss import mss
+#from mss import mss
 
 keyboard_keys = ["up","down","left","right"]
 
@@ -32,7 +32,7 @@ class PacmanEnv(Env):
 
         self.game = GameController()
         self.game.startGame()
-        self.sct = mss()
+        #self.sct = mss()
         self.saved_score = self.game.score
         self.saved_lives = self.game.lives
         self.done = 0
@@ -41,15 +41,15 @@ class PacmanEnv(Env):
 
         self.action_space = spaces.Discrete(N_DISCRETE_ACTIONS)
         shape = (BOUNDING_BOX['height'],BOUNDING_BOX['width'],NUMBER_OF_CHANNELS)
-        print(shape)
+        
         self.observation_space = spaces.Box(low = 0, high = 255, shape = shape, dtype = np.uint8)
             
 
     def _next_observation(self):
-        img = np.array(self.sct.grab(BOUNDING_BOX))
-        img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-        print(shape(img))
-        return img
+        view = pygame.surfarray.array3d(self.game.screen)
+        #  convert from (width, height, channel) to (height, width, channel)
+        view = view.transpose([1, 0, 2])
+        return view[45:545, :]
 
     def _take_action(self, action):
         self.game.AI_direction = action        
