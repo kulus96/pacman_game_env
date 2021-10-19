@@ -40,7 +40,7 @@ class PacmanEnv(Env):
         self.reward_range = REWARD_RANGE
 
         self.action_space = spaces.Discrete(N_DISCRETE_ACTIONS)
-        shape = (BOUNDING_BOX['height'],BOUNDING_BOX['width'],NUMBER_OF_CHANNELS)
+        shape = (BOUNDING_BOX['height'],BOUNDING_BOX['width'])
         
         self.observation_space = spaces.Box(low = 0, high = 255, shape = shape, dtype = np.uint8)
             
