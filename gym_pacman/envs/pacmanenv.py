@@ -74,7 +74,17 @@ class PacmanEnv(Env):
         return self._next_observation()
 
     def render(self, mode='human', close=False):
-        self.game.rendering = 0
+        view = pygame.surfarray.array3d(self.game.screen)
+        #  convert from (width, height, channel) to (height, width, channel)
+        view = view.transpose([1, 0, 2])
+        view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
+        #  convert from rgb to bgr
+        img_bgr = cv2.cvtColor(view, cv2.COLOR_RGB2BGR)
+
+        #Display image, clear cell every 0.5 seconds
+        cv2_imshow(img_bgr)
+        time.sleep(0.5)
+        output.clear()
 
     def _get_reward(self):
         self.done = 0
