@@ -16,7 +16,7 @@ import pygame
 
 keyboard_keys = ["up","down","left","right"]
 
-MAX_REWARD = 100000
+MAX_REWARD = 100
 N_DISCRETE_ACTIONS = 4
 
 BOUNDING_BOX = {'top': 170 , 'left': 100, 'width': 448, 'height': 500}
@@ -24,7 +24,6 @@ NUMBER_OF_CHANNELS = 1
 REWARD_RANGE = (-100,100)
 
 class PacmanEnv(Env):
-    """A stock trading environment for OpenAI gym"""
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
@@ -32,10 +31,7 @@ class PacmanEnv(Env):
 
         self.game = GameController()
         self.game.startGame()
-        #self.sct = mss()
-        self.saved_score = self.game.score
-        self.saved_lives = self.game.lives
-        self.done = 0
+        self.done = False
 
         self.reward_range = REWARD_RANGE
 
@@ -79,15 +75,10 @@ class PacmanEnv(Env):
         view = view.transpose([1, 0, 2])
         view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
         #  convert from rgb to bgr
-        img_bgr = cv2.cvtColor(view, cv2.COLOR_RGB2BGR)
-
-        #Display image, clear cell every 0.5 seconds
-        cv2_imshow(img_bgr)
-        time.sleep(0.5)
-        output.clear()
+        return cv2.cvtColor(view, cv2.COLOR_RGB2BGR)
 
     def _get_reward(self):
-        self.done = 0
+        self.done = False
         if self.game.events_AI == 0: # nothing or wall 
             return -1
         elif self.game.events_AI == 1: # Pellets
@@ -99,10 +90,10 @@ class PacmanEnv(Env):
         elif self.game.events_AI == 4: # pacman dead
             return -10
         elif self.game.events_AI == 5: # gameover
-            self.done = 1
+            self.done = True
             return -50
         elif self.game.events_AI == 6: #  won
-            self.done = 1
+            self.done = True
             return 100
         elif self.game.events_AI == 7: #  fruit (not in game)
             return 5
