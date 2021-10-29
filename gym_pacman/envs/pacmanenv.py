@@ -75,14 +75,14 @@ class PacmanEnv(Env):
         view = view.transpose([1, 0, 2])
         view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
         #  convert from rgb to bgr
-        return cv2.cvtColor(view, cv2.COLOR_RGB2BGR)
+        return view
 
     def _get_reward(self):
         self.done = False
         if self.game.events_AI == 0: # nothing or wall 
             return -5
         elif self.game.events_AI == 1: # Pellets
-            return 5
+            return 20
         elif self.game.events_AI == 2: # super pellets
             return 30
         elif self.game.events_AI == 3: # ghost kill
