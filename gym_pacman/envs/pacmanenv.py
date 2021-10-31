@@ -80,22 +80,30 @@ class PacmanEnv(Env):
     def _get_reward(self):
         self.done = False
         if self.game.events_AI == 0: # nothing or wall 
-            return -5
+            return -10
         elif self.game.events_AI == 1: # Pellets
-            return 20
+            return 10
         elif self.game.events_AI == 2: # super pellets
-            return 30
+            return 10
         elif self.game.events_AI == 3: # ghost kill
-            return 60
+            return 20
         elif self.game.events_AI == 4: # pacman dead
-            return -60
+            return -20
         elif self.game.events_AI == 5: # gameover
             self.done = True
-            return -100
+            return -30
         elif self.game.events_AI == 6: #  won
             self.done = True
-            return 100
+            return 50
         elif self.game.events_AI == 7: #  fruit (not in game)
             return 5
         else:
             return 0
+            
+            
+            
+            
+            
+            
+            
+            
