@@ -84,9 +84,9 @@ class PacmanEnv(Env):
         elif self.game.events_AI == 1: # Pellets
             return 10
         elif self.game.events_AI == 2: # super pellets
-            return 10
-        elif self.game.events_AI == 3: # ghost kill
             return 20
+        elif self.game.events_AI == 3: # ghost kill
+            return 30
         elif self.game.events_AI == 4: # pacman dead
             return -20
         elif self.game.events_AI == 5: # gameover
