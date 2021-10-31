@@ -178,9 +178,9 @@ class GameController(object):
             self.pellets.pelletList.remove(pellet)
             if pellet.name == POWERPELLET:
                 self.ghosts.startFreight()
-                self.events_AI = 2 #larpe pellet
+                self.events_AI = 2 #larpe POWER pellet
             if self.pellets.isEmpty():
-                self.events_AI = 6 #larpe pellet
+                self.events_AI = 6 #larpe  WON
                 self.flashBG = True
                 self.hideEntities()
                 self.pause.setPause(pauseTime=3, func=self.nextLevel)
