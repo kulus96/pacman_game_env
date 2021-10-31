@@ -80,7 +80,7 @@ class PacmanEnv(Env):
     def _get_reward(self):
         self.done = False
         if self.game.events_AI == 0: # nothing or wall         
-            return -10
+            return -100
         elif self.game.events_AI == 1: # Pellets
             return 10
         elif self.game.events_AI == 2: # super pellets
