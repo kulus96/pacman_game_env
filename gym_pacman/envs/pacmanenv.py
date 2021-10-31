@@ -88,10 +88,10 @@ class PacmanEnv(Env):
         elif self.game.events_AI == 3: # ghost kill
             return 30
         elif self.game.events_AI == 4: # pacman dead
-            return #-20
+            return 0#-20
         elif self.game.events_AI == 5: # gameover
             self.done = True
-            return #0
+            return 0#0
         elif self.game.events_AI == 6: #  won
             self.done = True
             return 50
