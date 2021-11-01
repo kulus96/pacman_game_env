@@ -21,7 +21,7 @@ N_DISCRETE_ACTIONS = 4
 
 BOUNDING_BOX = {'top': 170 , 'left': 100, 'width': 448, 'height': 500}
 NUMBER_OF_CHANNELS = 1
-REWARD_RANGE = (-100,100)
+REWARD_RANGE = (-20,20)
 
 class PacmanEnv(Env):
     metadata = {'render.modes': ['human']}
@@ -80,23 +80,23 @@ class PacmanEnv(Env):
     def _get_reward(self):
         self.done = False
         if self.game.events_AI == 0: # nothing or wall         
-            return -10
+            return -1
         elif self.game.events_AI == 1: # Pellets
-            return 10
+            return 2
         elif self.game.events_AI == 2: # super pellets
-            return 20
+            return 5
         elif self.game.events_AI == 3: # ghost kill
-            return 30
+            return 10
         elif self.game.events_AI == 4: # pacman dead
-            return 0#-20
+            return -10
         elif self.game.events_AI == 5: # gameover
             self.done = True
-            return 0#0
+            return -20
         elif self.game.events_AI == 6: #  won
             self.done = True
-            return 50
+            return 20
         elif self.game.events_AI == 7: #  fruit (not in game)
-            return 5
+            return 7
         else:
             return -10
             
