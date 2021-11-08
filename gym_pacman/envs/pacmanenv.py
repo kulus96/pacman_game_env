@@ -45,8 +45,8 @@ class PacmanEnv(Env):
         view = pygame.surfarray.array3d(self.game.screen)
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
-        view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
-        print(view.shape)
+        #view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
+        #print(view.shape)
         return view[45:545, :]
 
     def _take_action(self, action):
