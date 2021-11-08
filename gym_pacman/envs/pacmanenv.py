@@ -20,7 +20,7 @@ MAX_REWARD = 100
 N_DISCRETE_ACTIONS = 4
 
 BOUNDING_BOX = {'top': 170 , 'left': 100, 'width': 448, 'height': 500}
-NUMBER_OF_CHANNELS = 1
+NUMBER_OF_CHANNELS = 3
 REWARD_RANGE = (-20,20)
 
 class PacmanEnv(Env):
@@ -74,7 +74,7 @@ class PacmanEnv(Env):
         view = pygame.surfarray.array3d(self.game.screen)
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
-        view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
+        #view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
         #  convert from rgb to bgr
         return view
 
