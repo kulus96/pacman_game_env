@@ -36,7 +36,7 @@ class PacmanEnv(Env):
         self.reward_range = REWARD_RANGE
 
         self.action_space = spaces.Discrete(N_DISCRETE_ACTIONS)
-        shape = (BOUNDING_BOX['height'],BOUNDING_BOX['width'])
+        shape = (BOUNDING_BOX['height'],BOUNDING_BOX['width'],NUMBER_OF_CHANNELS)
         
         self.observation_space = spaces.Box(low = 0, high = 255, shape = shape, dtype = np.uint8)
             
@@ -46,6 +46,7 @@ class PacmanEnv(Env):
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
         view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
+        print(view.shape)
         return view[45:545, :]
 
     def _take_action(self, action):
