@@ -10,7 +10,7 @@ class Pacman(Entity):
         Entity.__init__(self, node )
         self.name = PACMAN    
         self.color = YELLOW
-        self.direction = RIGHT
+        self.direction = LEFT
         self.setBetweenNodes(LEFT)
         self.alive = True
         self.sprites = PacmanSprites(self)
@@ -27,28 +27,26 @@ class Pacman(Entity):
         self.alive = False
         self.direction = STOP
 
-    def update(self, dt, AI_direction):	
+    def update(self, dt,AI_dir):	
         self.sprites.update(dt)
         self.position += self.directions[self.direction]*self.speed*dt
-        #print(self.directions[self.direction]*self.speed*dt)
-        direction = self.getValidKey(AI_direction)
-        if self.alive: 
-            if self.overshotTarget():
-                self.node = self.target
-                if self.node.neighbors[PORTAL] is not None:
-                    self.node = self.node.neighbors[PORTAL]
-                self.target = self.getNewTarget(direction)
-                if self.target is not self.node:
-                    self.direction = direction
-                else:
-                    self.target = self.getNewTarget(self.direction)
+        direction = self.getValidKey(AI_dir)
+        if self.overshotTarget():
+            self.node = self.target
+            if self.node.neighbors[PORTAL] is not None:
+                self.node = self.node.neighbors[PORTAL]
+            self.target = self.getNewTarget(direction)
+            if self.target is not self.node:
+                self.direction = direction
+            else:
+                self.target = self.getNewTarget(self.direction)
 
-                if self.target is self.node:
-                    self.direction = STOP
-                self.setPosition()
-            else: 
-                if self.oppositeDirection(direction):
-                    self.reverseDirection()
+            if self.target is self.node:
+                self.direction = STOP
+            self.setPosition()
+        else: 
+            if self.oppositeDirection(direction):
+                self.reverseDirection()
 
     def getValidKey(self,AI_direction):
         if(AI_direction != None):
@@ -60,15 +58,6 @@ class Pacman(Entity):
                 return LEFT
             elif(AI_direction == 3):
                 return RIGHT
-        key_pressed = pygame.key.get_pressed()
-        if key_pressed[K_UP]:
-            return UP
-        if key_pressed[K_DOWN]:
-            return DOWN
-        if key_pressed[K_LEFT]:
-            return LEFT
-        if key_pressed[K_RIGHT]:
-            return RIGHT
         return STOP  
 
     def eatPellets(self, pelletList):

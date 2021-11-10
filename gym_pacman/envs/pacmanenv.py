@@ -31,6 +31,7 @@ class PacmanEnv(Env):
 
         self.game = GameController()
         self.game.startGame()
+        self.game.update()
         self.done = False
 
         self.reward_range = REWARD_RANGE
@@ -46,7 +47,6 @@ class PacmanEnv(Env):
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
         #view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
-        #print(view.shape)
         return view[45:545, :]
 
     def _take_action(self, action):
@@ -74,9 +74,9 @@ class PacmanEnv(Env):
         view = pygame.surfarray.array3d(self.game.screen)
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
-        #view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
+
         #  convert from rgb to bgr
-        return view
+        return view[45:545, :]
 
     def _get_reward(self):
         self.done = False
@@ -100,11 +100,3 @@ class PacmanEnv(Env):
             return 7
         else:
             return -10
-            
-            
-            
-            
-            
-            
-            
-            
