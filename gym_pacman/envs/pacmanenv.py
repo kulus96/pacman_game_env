@@ -80,23 +80,28 @@ class PacmanEnv(Env):
 
     def _get_reward(self):
         self.done = False
+        reward = 0 
+        reward = -3  * self.game.pacman.distancePellets(self.game.pellets.pelletList)/360704 # the number comes from the biggest distance seen
+
         if self.game.events_AI == 0: # nothing or wall         
-            return -1
+            reward += -0.5
         elif self.game.events_AI == 1: # Pellets
-            return 2
+            reward += 2
         elif self.game.events_AI == 2: # super pellets
-            return 5
+            reward += 5
         elif self.game.events_AI == 3: # ghost kill
-            return 10
+            reward += 10
         elif self.game.events_AI == 4: # pacman dead
-            return -10
+            reward += -10
         elif self.game.events_AI == 5: # gameover
             self.done = True
-            return -20
+            reward += -20
         elif self.game.events_AI == 6: #  won
             self.done = True
-            return 20
+            reward += 20
         elif self.game.events_AI == 7: #  fruit (not in game)
-            return 7
+            reward += 7
         else:
-            return -10
+            reward += -10
+        return reward
+            
