@@ -79,10 +79,8 @@ class Pacman(Entity):
             return True
         return False
 
-
     def distancePellets(self, pelletList):
         smallest_dist = 99999
-
         for pellet in pelletList:
             d = self.position - pellet.position
             dSquared = d.magnitudeSquared()

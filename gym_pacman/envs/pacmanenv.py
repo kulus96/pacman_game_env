@@ -64,7 +64,9 @@ class PacmanEnv(Env):
         obs = self._next_observation()
 
         return obs, reward, self.done, {}
-
+    def get_score(self):
+        return self.game.score
+        
     def reset(self):
         self.game.restartGame()
 
@@ -104,10 +106,4 @@ class PacmanEnv(Env):
         else:
             reward += -10
         return reward
-            
-            
-            
-            
-            
-            
-            
+    
