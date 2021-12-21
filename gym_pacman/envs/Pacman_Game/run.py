@@ -11,15 +11,8 @@ from text import TextGroup
 from sprites import LifeSprites
 from sprites import MazeSprites
 from mazes import MazeController
-from mazedata import MazeData
-from pygame import camera
-import pygame
-import os
-x = 100
-y = 100
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
-PACMAN_EVENTS = [0, 1, 2, 3, 4, 5, 6,7]
-PACMAN_EVENTS_NAME = ['Nothing','Pellets','super pellets','ghost kill','pacman dead','gameover','won','fruit']
+from mazedata import MazeData######
+
 class GameController(object):
     def __init__(self):
         pygame.init()
@@ -43,11 +36,8 @@ class GameController(object):
         self.maze = MazeController()
         self.mazedata = MazeData()######
         
-        
-        self.AI_direction = None
         self.events_AI = 0
-        self.rendering = 0
-        self.dt = 0.16
+        self.AI_direction = None
 
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
@@ -61,7 +51,7 @@ class GameController(object):
 
     def startGame(self):      
         self.mazedata.loadMaze(self.level)
-        self.mazesprites = MazeSprites("Pacman_Game/"+self.mazedata.obj.name+".txt","Pacman_Game/"+ self.mazedata.obj.name+"_rotation.txt")
+        self.mazesprites = MazeSprites("Pacman_Game/"+self.mazedata.obj.name+".txt", "Pacman_Game/"+self.mazedata.obj.name+"_rotation.txt")
         self.setBackground()
         self.nodes = NodeGroup("Pacman_Game/"+self.mazedata.obj.name+".txt")
         self.mazedata.obj.setPortalPairs(self.nodes)
@@ -84,15 +74,15 @@ class GameController(object):
 
     def startGame_old(self):      
         self.mazedata.loadMaze(self.level)#######
-        self.mazesprites = MazeSprites("Pacman_Game/"+"maze1.txt", "Pacman_Game/"+"maze1_rotation.txt")
+        self.mazesprites = MazeSprites("Pacman_Game/"+"maze1.txt", "maze1_rotation.txt")
         self.setBackground()
-        self.nodes = NodeGroup("Pacman_Game/"+"maze1.txt")
+        self.nodes = NodeGroup("maze1.txt")
         self.nodes.setPortalPair((0,17), (27,17))
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
         self.nodes.connectHomeNodes(homekey, (15,14), RIGHT)
         self.pacman = Pacman(self.nodes.getNodeFromTiles(15, 26))
-        self.pellets = PelletGroup("Pacman_Game/"+"maze1.txt")
+        self.pellets = PelletGroup("maze1.txt")
         self.ghosts = GhostGroup(self.nodes.getStartTempNode(), self.pacman)
         self.ghosts.blinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 0+14))
         self.ghosts.pinky.setStartNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
@@ -110,18 +100,13 @@ class GameController(object):
         self.nodes.denyAccessList(15, 14, UP, self.ghosts)
         self.nodes.denyAccessList(12, 26, UP, self.ghosts)
         self.nodes.denyAccessList(15, 26, UP, self.ghosts)
-
-        
-
     def update(self):
         self.events_AI = 0
-        dt = self.dt  # (self.clock.tick(30) / 1000.0)
-        
-        # if (self.rendering == 1):
-        #     (self.clock.tick(30) / 1000.0)
+        dt = 0.16 #
+        #dt = self.clock.tick(30) / 1000.0
         self.textgroup.update(dt)
         self.pellets.update(dt)
-        if not self.pause.paused: 
+        if not self.pause.paused:
             self.ghosts.update(dt)      
             #if self.fruit is not None:
             #    self.fruit.update(dt)
@@ -132,8 +117,10 @@ class GameController(object):
         if self.pacman.alive:
             if not self.pause.paused:
                 self.pacman.update(dt,self.AI_direction)
+                #self.pacman.update(dt)
         else:
             self.pacman.update(dt,self.AI_direction)
+            #self.pacman.update(dt)
 
         if self.flashBG:
             self.flashTimer += dt
@@ -171,7 +158,7 @@ class GameController(object):
             self.pellets.numEaten += 1
             self.updateScore(pellet.points)
             self.events_AI = 1 #larpe pellet
-            if self.pellets.numEaten == 30:
+            if self.pellets.numEaten == 30: 
                 self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
             if self.pellets.numEaten == 70:
                 self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
@@ -183,13 +170,13 @@ class GameController(object):
                 self.events_AI = 6 #larpe  WON
                 self.flashBG = True
                 self.hideEntities()
-                self.pause.setPause(pauseTime=3, func=self.nextLevel)
+                self.pause.setPause(pauseTime=0, func=self.nextLevel)
 
     def checkGhostEvents(self):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost):
                 if ghost.mode.current is FREIGHT:
-                    self.pacman.visible = True # larpe17 False
+                    self.pacman.visible = True #False larpe
                     self.events_AI = 3 #larpe ghost kill
                     ghost.visible = False
                     self.updateScore(ghost.points)                  
@@ -200,8 +187,8 @@ class GameController(object):
                     self.nodes.allowHomeAccess(ghost)
                 elif ghost.mode.current is not SPAWN:
                     if self.pacman.alive:
-                        self.lives -=  1
                         self.events_AI = 4 #larpe pacman dead
+                        self.lives -=  1
                         self.lifesprites.removeImage()
                         self.pacman.die()               
                         self.ghosts.hide()
@@ -210,17 +197,17 @@ class GameController(object):
                             self.textgroup.showText(GAMEOVERTXT)
                             self.pause.setPause(pauseTime=0, func=self.restartGame)
                         else:
-                            self.pause.setPause(pauseTime=0, func=self.resetLevel) 
+                            self.pause.setPause(pauseTime=0, func=self.resetLevel)
     
     def checkFruitEvents(self):
         if self.pellets.numEaten == 50 or self.pellets.numEaten == 140:
             if self.fruit is None:
                 self.fruit = Fruit(self.nodes.getNodeFromTiles(9, 20), self.level)
-                #print(self.fruit)
+                print(self.fruit)
         if self.fruit is not None:
             if self.pacman.collideCheck(self.fruit):
                 self.updateScore(self.fruit.points)
-                self.events_AI = 7
+                self.events_AI = 7 # larpe
                 self.textgroup.addText(str(self.fruit.points), WHITE, self.fruit.position.x, self.fruit.position.y, 8, time=1)
                 fruitCaptured = False
                 for fruit in self.fruitCaptured:
@@ -243,7 +230,7 @@ class GameController(object):
 
     def nextLevel(self):
         self.showEntities()
-        self.level += 1
+        #self.level += 1
         self.pause.paused = True
         self.startGame()
         self.textgroup.updateLevel(self.level)
@@ -294,22 +281,44 @@ class GameController(object):
 
         pygame.display.update()
 
+# UP = 1
+# DOWN = -1
+# LEFT = 2
+# RIGHT = -2
+# import time
+# def input_key(obs):
+#     #time.sleep(0.5)
+#     while True:
+#         for event in pygame.event.get():
+#             if event.type == QUIT:
+#                 pygame.quit()
+#             if event.type == KEYDOWN:
+#                 key_pressed = pygame.key.get_pressed()
+#                 if key_pressed[K_UP]:
+#                     print("UP",UP)
+#                     return 0#UP
+#                 if key_pressed[K_DOWN]:
+#                     print("D",DOWN)
+#                     return 1#DOWN
+#                 if key_pressed[K_LEFT]:
+#                     print("L",LEFT)
+#                     return 2#LEFT
+#                 if key_pressed[K_RIGHT]:
+#                     print("R",RIGHT )
+#                     return 3 #R  IGHT 
+
 
 # if __name__ == "__main__":
 #     game = GameController()
 #     game.startGame()
-#     i = 0
-    
-#     #keyboard.press_and_release('space')
-#     game.pause.flip()
-    
-#     while 100:
-#         if(game.pause.paused):
-#             game.pause.flip()
-#         if game.flashBG:
-#             game.restartGame()
-#         print("score",game.score,"pacman pose" ,game.pacman.position,"Ghost", game.ghosts.ghosts[1].position,"ghost mode", game.ghosts.ghosts[1].mode.current)
+#     game.update()
+#     while True:
+#         print("here")
+#         if (game.pause.paused ==True):
+#             game.pause.paused = False
+#         game.AI_direction = input_key(2)
 #         game.update()
-                                                        
+#         print(game.events_AI)
 
 
+ 

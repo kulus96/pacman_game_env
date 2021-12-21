@@ -6,10 +6,10 @@ from numpy.core.fromnumeric import shape
 import numpy as np
 import cv2
 import sys
-sys.path.append(r'gym_pacman/envs/Pacman_Game') 
-sys.path.append(r'gym_pacman/envs') 
-from run import *
-from constants import PACMAN
+sys.path.append(r'/home/lpe/Desktop/Project_in_Artificial_Intelligence_PAC-MAN/pacman_game_env/gym_pacman/envs/Pacman_Game') 
+sys.path.append(r'/home/lpe/Desktop/Project_in_Artificial_Intelligence_PAC-MAN/pacman_game_env/gym_pacman/envs') 
+from Pacman_Game.run import *
+from Pacman_Game.constants import PACMAN
 import pygame
 
 #from mss import mss
@@ -31,6 +31,7 @@ class PacmanEnv(Env):
 
         self.game = GameController()
         self.game.startGame()
+        self.game.update()
         self.done = False
 
         self.reward_range = REWARD_RANGE
@@ -46,7 +47,6 @@ class PacmanEnv(Env):
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
         #view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
-        #print(view.shape)
         return view[45:545, :]
 
     def _take_action(self, action):
@@ -74,33 +74,36 @@ class PacmanEnv(Env):
         view = pygame.surfarray.array3d(self.game.screen)
         #  convert from (width, height, channel) to (height, width, channel)
         view = view.transpose([1, 0, 2])
-        #view = cv2.cvtColor(view, cv2.COLOR_RGB2GRAY)
+
         #  convert from rgb to bgr
-        return view
+        return view[45:545, :]
 
     def _get_reward(self):
         self.done = False
+        reward = 0 
+        reward = -3  * self.game.pacman.distancePellets(self.game.pellets.pelletList)/360704 # the number comes from the biggest distance seen
+
         if self.game.events_AI == 0: # nothing or wall         
-            return -1
+            reward += -0.5
         elif self.game.events_AI == 1: # Pellets
-            return 2
+            reward += 2
         elif self.game.events_AI == 2: # super pellets
-            return 5
+            reward += 5
         elif self.game.events_AI == 3: # ghost kill
-            return 10
+            reward += 10
         elif self.game.events_AI == 4: # pacman dead
-            return -10
+            reward += -10
         elif self.game.events_AI == 5: # gameover
             self.done = True
-            return -20
+            reward += -20
         elif self.game.events_AI == 6: #  won
             self.done = True
-            return 20
+            reward += 20
         elif self.game.events_AI == 7: #  fruit (not in game)
-            return 7
+            reward += 7
         else:
-            return -10
-            
+            reward += -10
+        return reward
             
             
             
